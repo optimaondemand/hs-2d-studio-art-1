@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2-D Studio Art &mdash; Unit 2: Prehistoric Cave Art and the Power of Line</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .el-credit { font-size: 11px; color: #6b7a99; display: block; margin-top: 4px; line-height: 1.4; }
+    .value-scale { display: flex; height: 40px; border-radius: 6px; overflow: hidden; margin: 10px 0 4px; border: 1px solid #D0D9E8; }
+    .value-scale div { flex: 1; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">2-D STUDIO ART</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Unit</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Unit 2 of 16</div>
+        <div style="font-size: 12px; color: #666;">Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Line</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Studio Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Contour Animal Drawing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Cycle Length</div>
+        <div style="font-size: 16px; color: #0e1c42;">2 weeks</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">UNIT 2</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Prehistoric Cave Art: The Power of Line</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Today's Focus -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">The oldest art on Earth is almost all line. With nothing but charcoal, earth, and a wall, how did people thousands of years ago make an animal leap into life? And what can a single line still do that nothing else can?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">Last unit you met all seven elements. This unit you slow down and live inside one of them. Line is the first mark a child makes and the first mark humans ever made on a wall. Learn to control it and you control the foundation of every drawing you will ever make.</div>
+    </div>
+
+    <!-- CONTENT CARD: LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Before we name anything, just look. Spend a full minute with the ceiling below. Let your eye follow the animal the way the people who painted it did.</p>
+
+        <figure class="art-fig">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Altamira,%20bison.jpg" alt="A bison painted in red-brown and black on a rough cave ceiling, its body built from confident outlines and earth-colored shading." />
+            <figcaption>Bison, polychrome painting on the cave ceiling, Cave of Altamira, Cantabria, Spain. Upper Paleolithic (c. 36,000 to 15,000 BCE). Public domain. Source: Wikimedia Commons (File:Altamira, bison.jpg).</figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This bison lives on the ceiling of the Cave of Altamira in northern Spain. People crawled into the dark by torchlight, thousands of years before writing, before farming, before cities. They ground charcoal and colored earth into pigment and used the natural bulges of the rock to give the animal a swelling body. We do not know their names, so we credit the work to their culture, the Magdalenian people, and not to one person. What we can still read is their hand: confident, fast, and carried almost entirely by line.</p>
+
+        <div class="callout c-art">
+            <div class="ck">&#128172; WONDER FIRST</div>
+            <div class="cb">No one paid these artists. No one was grading them. So why did human beings, with no easy light and no comfort, go to all this trouble to draw an animal on a wall? Hold your answer in mind. By the end of this lesson you will have the vocabulary to say exactly how they did it.</div>
+        </div>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">Why do you think this animal was drawn? Pick the reason that feels closest to you.</div>
+            <div class="widget-options">
+                <button data-response="Good. Hold onto that reason. Scholars have argued the same thing for over a century from the way the animals cluster near each other.">To bring luck before a hunt</button>
+                <button data-response="Good. Hold onto that reason. The careful, repeated images can read like a record kept on purpose.">To tell a story or keep a record</button>
+                <button data-response="Good. Hold onto that reason. Many of these caves are deep and hard to reach, which suggests they mattered as more than decoration.">As part of a ritual or belief</button>
+                <button data-response="Good. Hold onto that reason. The urge to make a mark and see a living thing appear is older than almost everything else humans built.">For the pure joy of making</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+        <p style="font-size: 15px; color: #6b7a99;">Scholars still debate every one of those answers, and the honest truth is we do not know for certain. What we do know is the tool these painters reached for: line. That is what we study next.</p>
+    </div>
+
+    <!-- CONTENT CARD: NAME WHAT YOU SEE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; NAME WHAT YOU SEE</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A <strong>line</strong> is the path of a moving point. It can describe an edge, suggest a movement, or carry a mood, all at once. Artists do not use just one kind of line. Below are the kinds you will reach for as a 2-D artist. Trace each one with your eye.</p>
+
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="padding:0;"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/American_bison_bison.jpg?width=400" alt="A young American bison standing in profile against grass, its heavy body and curved horn forming one clear, continuous edge." style="width:100%;height:80px;object-fit:cover;" /></div>
+                <div class="el-text"><strong>Contour Line</strong><span>A line that traces the edge of a form. It says where the object stops and the air begins. The backbone of this unit.</span><span class="el-credit">Photo: Ryan Hagerty, U.S. Fish and Wildlife Service. Public domain.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><path d="M26 22 C50 14 44 40 30 44 C58 56 80 30 70 22 C96 18 100 52 122 48 C150 42 132 18 150 22 C172 26 162 56 178 50" stroke="#1B8A7A" stroke-width="2" fill="none" stroke-linecap="round"/></svg></div>
+                <div class="el-text"><strong>Continuous Line</strong><span>One unbroken line drawn without lifting your tool. It keeps the hand and eye moving together.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="padding:0;"><img src="https://commons.wikimedia.org/wiki/Special:FilePath/The_Horse_in_Motion_high_res.jpg?width=400" alt="A grid of black-and-white photographs showing a galloping horse, its legs caught in different fast, energetic positions of its stride." style="width:100%;height:80px;object-fit:cover;" /></div>
+                <div class="el-text"><strong>Gesture Line</strong><span>Fast, loose, energetic marks that capture motion and the feel of a pose before any detail.</span><span class="el-credit">Photo: Eadweard Muybridge, <em>The Horse in Motion</em>, 1878. Library of Congress. Public domain.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><path d="M16 34 C50 14 90 14 110 34" stroke="#0E1C42" stroke-width="1" fill="none"/><path d="M110 34 C135 50 165 50 188 32" stroke="#0E1C42" stroke-width="5.5" fill="none"/></svg></div>
+                <div class="el-text"><strong>Line Weight and Quality</strong><span>Thick or thin, dark or light, fast or slow. Varying weight makes a drawing feel alive instead of flat.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><ellipse cx="100" cy="34" rx="56" ry="22" fill="none" stroke="#1B8A7A" stroke-width="1.4"/><path d="M60 16 C70 34 70 34 60 52 M84 13 C96 34 96 34 84 55 M116 13 C104 34 104 34 116 55 M140 16 C130 34 130 34 140 52" stroke="#1B8A7A" stroke-width="1.4" fill="none"/></svg></div>
+                <div class="el-text"><strong>Cross-Contour Line</strong><span>Lines that wrap over the surface of a form, like ribbons, showing its roundness and volume.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><line x1="20" y1="18" x2="180" y2="18" stroke="#0E1C42" stroke-width="2"/><line x1="20" y1="36" x2="180" y2="50" stroke="#C7922C" stroke-width="2.4"/><path d="M20 60 C70 48 130 70 180 56" stroke="#D9583B" stroke-width="2.4" fill="none"/></svg></div>
+                <div class="el-text"><strong>Line Direction</strong><span>Horizontal lines feel calm, diagonals feel active, curves feel gentle. Direction carries mood.</span></div>
+            </div>
+        </div>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; HELPFUL TO KNOW</div>
+            <div class="cb">A <strong>blind contour drawing</strong> is the classic eye-training drill: you watch the object and trace its edge with your pencil while never looking at your paper. The result always comes out a little wild, and that is fine. The goal is not a pretty picture. The goal is teaching your eye and your hand to move at the same speed.</div>
+        </div>
+
+        <h3 style="font-size: 20px; color: #0e1c42; margin: 18px 0 8px 0;">Why cave painters reached for line first</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Line is the fastest way to claim a shape out of nothing. With one charcoal stroke a Magdalenian painter could pin down the heavy curve of a bison's back or the spring in a horse's leg. Notice that these artists rarely filled in every detail. They trusted the contour, the outer edge, to do the work, and they varied the weight of their marks so the animals press forward off the rock. Their whole palette came from the earth: pale yellow ochre, through red-brown, to charcoal black.</p>
+        <div class="value-scale">
+            <div style="background:#fff"></div><div style="background:#f2ead9"></div><div style="background:#d9b27a"></div><div style="background:#a9712f"></div><div style="background:#7a4a1f"></div><div style="background:#4a2e15"></div><div style="background:#000000"></div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin-top: 0;">The earth-and-charcoal range a cave painter actually had: pale ochre through red-brown to black. You will draw in this spirit with a single pencil.</p>
+    </div>
+
+    <!-- CONTENT CARD: WATCH IT WORK (DAIJ) -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; WATCH IT WORK</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Artists and critics look at art in a deliberate order, so that judgment is earned and not just blurted. The four steps spell <strong>DAIJ</strong>: Describe, Analyze, Interpret, Judge. Watch it applied to the Altamira bison above. You will use the same steps in your VR critique this week.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Describe (just the facts)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A single large animal on a rough stone ceiling. Its body is built from red-brown and black, with a heavy outline around the back, head, and legs. The colors are the colors of charcoal and earth.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Analyze (how is it built?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The image is carried by contour line. The painter laid a single confident outline around the animal rather than shading it flat all over. The line weight swells along the back and belly and thins toward the legs, so the body feels heavy and the legs feel quick. The natural bulge of the rock pushes the bison's mass toward us.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Interpret (what is it saying?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The animal is drawn with respect and close attention, the way you draw something that matters to your survival or your spirit. The energy in the lines suggests a living, breathing creature, not a still display.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Judge (does it succeed?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">It succeeds across an almost unimaginable span of time. With charcoal, earth, and pure line, an unnamed culture made an animal that still feels like it could rise off the rock. That is the power of line, and it is what you are about to practice.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; NAME THE LINE</div>
+            <div class="widget-question">Read each prompt, commit to an answer, then check it.</div>
+            <div class="widget-row" data-correct="contour" data-hint="Think about a line that follows the outer edge of the animal, where it stops and the air begins. Try again.">
+                <div class="widget-row-prompt">The painter built the bison with one confident outline tracing its edge, instead of shading it in solid. Which kind of line is that?</div>
+                <div class="widget-options">
+                    <button data-choice="gesture">Gesture line</button>
+                    <button data-choice="crosscontour">Cross-contour line</button>
+                    <button data-choice="contour" data-fb="Yes. A line that traces the outer edge of a form is a contour line. It is the workhorse of this whole unit and of your studio project.">Contour line</button>
+                    <button data-choice="direction">Line direction</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="weight" data-hint="Which idea covers a line that swells thick along the back and thins toward the hooves? Try again.">
+                <div class="widget-row-prompt">The outline thickens along the heavy curve of the back, then thins down toward the legs. Which idea describes that change in the line?</div>
+                <div class="widget-options">
+                    <button data-choice="weight" data-fb="Right. A line that grows thick and thin is using line weight, and that swelling is what gives the animal its sense of mass and movement.">Line weight</button>
+                    <button data-choice="blind">Blind contour</button>
+                    <button data-choice="continuous">Continuous line</button>
+                    <button data-choice="crosscontour">Cross-contour line</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+
+        <details>
+            <summary>&#9654;&nbsp; Try it in your notebook: name one place a cave painter might use a GESTURE line, then reveal a check.</summary>
+            <div class="ac-body">Write your answer before you open this. One strong answer: the legs of a running horse or a charging bison, where a few fast, loose strokes capture the motion of the pose before any careful edge is drawn. Gesture comes first; the clean contour comes after.</div>
+        </details>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI AND THE CONTOUR LINE</div>
+        <div class="cb">An AI tool can trace or outline a photo in an instant and hand you a clean contour. That can be a useful shortcut for some jobs. What it cannot do is build the eye-and-hand coordination that contour drawing trains: the link between your eye crawling along an animal's edge and your hand following at the same speed. That coordination is the actual skill this project teaches, and it grows only through your own drawing. The contour you produce by hand, not the outline a tool generates, is the work being graded here.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Line</strong>The path of a moving point; the first element of art.</div>
+            <div class="vocab-card"><strong>Contour Line</strong>A line that traces the edge of a form.</div>
+            <div class="vocab-card"><strong>Blind Contour</strong>Drawing an edge while looking only at the object, never at your paper.</div>
+            <div class="vocab-card"><strong>Continuous Line</strong>One unbroken line drawn without lifting the tool.</div>
+            <div class="vocab-card"><strong>Gesture Line</strong>Fast, loose marks that capture motion and pose.</div>
+            <div class="vocab-card"><strong>Line Weight</strong>The thickness, darkness, or pressure of a line.</div>
+            <div class="vocab-card"><strong>Line Quality</strong>The character of a line: smooth, jagged, bold, or faint.</div>
+            <div class="vocab-card"><strong>Cross-Contour</strong>Lines that wrap over a surface to show its volume.</div>
+            <div class="vocab-card"><strong>Pigment</strong>A coloring material; cave painters used charcoal and ochre.</div>
+            <div class="vocab-card"><strong>Ochre</strong>A natural earth pigment in yellow, red, and brown tones.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Sketch: Blind Contour and Continuous Line</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">A blind contour of a shoe and a continuous-line drawing of your own hand, on one sheet. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>VR Session: Cave-Art Gallery Critique</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Choose a real cave-art work, bring it into your VR space, run DAIJ on it, then draw a cave animal in contour line. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Cave Art and the Line</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Studio Project: Contour Animal Drawing plus Artist Statement</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Draw an animal in varied contour line, no shading. Your one graded artwork this cycle.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">One line, used with confidence, is enough to make a living thing appear. The Magdalenian painters proved it on a cave ceiling tens of thousands of years ago. This week you pick up the same tool, an edge and a steady hand, and prove it again.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; 2-D STUDIO ART &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Unit 2 &middot; Prehistoric Cave Art: The Power of Line</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork shown is in the public domain; see caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

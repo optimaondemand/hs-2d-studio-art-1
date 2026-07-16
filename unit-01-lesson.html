@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2-D Studio Art &mdash; Unit 1: The Elements of Art</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .value-scale { display: flex; height: 40px; border-radius: 6px; overflow: hidden; margin: 10px 0 4px; border: 1px solid #D0D9E8; }
+    .value-scale div { flex: 1; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">2-D STUDIO ART</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Unit</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q1 &middot; Unit 1 of 16</div>
+        <div style="font-size: 12px; color: #666;">Foundations</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">The 7 Elements of Art</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Studio Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Design Your Dream Room</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Cycle Length</div>
+        <div style="font-size: 16px; color: #0e1c42;">2 weeks</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">UNIT 1</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">The Elements of Art</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Today's Focus -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">An artist has only seven building blocks to work with. How do line, shape, form, space, value, color, and texture turn a blank surface into a place you can almost step into?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">This unit gives you the names for everything you will use for the rest of the year. Learn the seven elements once, and you can read any artwork and build your own on purpose instead of by accident.</div>
+    </div>
+
+    <!-- CONTENT CARD: LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Before we name anything, just look. Spend a full minute with the painting below. Let your eye wander the way it wants to.</p>
+
+        <figure class="art-fig">
+            <img src="https://www.artic.edu/iiif/2/6644829f-f292-c5c4-a73c-0356a6fdbf0d/full/843,/0/default.jpg" alt="The Bedroom by Vincent van Gogh: a small room with a wooden bed, two chairs, a window, and framed pictures on a blue wall." />
+            <figcaption>Vincent van Gogh (Dutch, 1853&ndash;1890), <em>The Bedroom</em>, 1889. Oil on canvas. Art Institute of Chicago, Helen Birch Bartlett Memorial Collection. Public domain. Source: <a href="https://www.artic.edu/artworks/28560">artic.edu/artworks/28560</a></figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This is Van Gogh's own bedroom in the south of France. He painted it three times because the room mattered to him: it was the first place he had ever truly owned. Notice how much he tells you with so little. The floor tilts up toward you. The bed is heavy and solid. The walls are a restless blue. Two of everything sits waiting, as if for a guest who has not arrived.</p>
+
+        <div class="callout c-art">
+            <div class="ck">&#128172; WONDER FIRST</div>
+            <div class="cb">What do you notice first in this room? What feels a little off about how it is built? Hold your answer in mind. By the end of this lesson you will have the vocabulary to say exactly what Van Gogh did.</div>
+        </div>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">When you look at this bedroom, which feeling comes closest?</div>
+            <div class="widget-options">
+                <button data-response="Good. Now hold onto why: somewhere in the painting is the evidence for that feeling.">Calm and restful</button>
+                <button data-response="Good. Now hold onto why: the empty second chair and second pillow may be doing that work.">Lonely or waiting</button>
+                <button data-response="Good. Now hold onto why: the tilting floor and crowded furniture may be doing that work.">Cramped and tilting</button>
+                <button data-response="Good. Now hold onto why: the warm yellows and reds may be doing that work.">Cheerful and bright</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+        <p style="font-size: 15px; color: #6b7a99;">Every one of those answers can be defended from the painting itself. That is the point: an artist builds a feeling out of choices you can point to. Now learn to name those choices.</p>
+    </div>
+
+    <!-- CONTENT CARD: NAME WHAT YOU SEE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; NAME WHAT YOU SEE</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The <strong>Elements of Art</strong> are the seven basic tools every artist uses, in every culture and every century. They are the grammar of art: the way letters build words, the elements build images.</p>
+
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><line x1="10" y1="58" x2="190" y2="10" stroke="#0E1C42" stroke-width="2"/><path d="M10 34 Q60 6 110 34 T190 34" stroke="#1B8A7A" stroke-width="3" fill="none"/></svg></div>
+                <div class="el-text"><strong>Line</strong><span>A path made by a moving point. Its weight and direction carry feeling. Van Gogh's lines almost vibrate.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><rect x="20" y="13" width="42" height="42" fill="#1B8A7A"/><circle cx="108" cy="34" r="21" fill="#C7922C"/><path d="M148 56 Q158 13 184 56 Z" fill="#D9583B"/></svg></div>
+                <div class="el-text"><strong>Shape</strong><span>A flat, enclosed area. Geometric shapes are precise; organic shapes are free, like those in nature.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><defs><radialGradient id="g1" cx="35%" cy="30%"><stop offset="0%" stop-color="#fff"/><stop offset="100%" stop-color="#0E1C42"/></radialGradient></defs><circle cx="100" cy="34" r="25" fill="url(#g1)"/></svg></div>
+                <div class="el-text"><strong>Form</strong><span>Shape with the illusion of depth: height, width, and volume. Value turns a flat circle into a ball.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><rect x="78" y="8" width="44" height="52" fill="#1B8A7A"/><rect x="40" y="23" width="30" height="37" fill="#7CC3B8"/><rect x="130" y="23" width="30" height="37" fill="#7CC3B8"/></svg></div>
+                <div class="el-text"><strong>Space</strong><span>The area within, around, and between things. Overlap and size make a flat surface feel deep.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="padding:0;"><div class="value-scale" style="margin:0;border:none;border-radius:0;height:80px;"><div style="background:#fff"></div><div style="background:#cfd6e0"></div><div style="background:#9aa3b2"></div><div style="background:#5b6473"></div><div style="background:#0E1C42"></div></div></div>
+                <div class="el-text"><strong>Value</strong><span>How light or dark something is. Value is how artists fake light, shadow, and depth on flat paper.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:linear-gradient(90deg,#D9583B,#C7922C,#1B8A7A,#2196D0,#0E1C42);"></div>
+                <div class="el-text"><strong>Color</strong><span>Made by light. Three traits: hue (its name), value (light or dark), and intensity (bright or dull).</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:repeating-linear-gradient(45deg,#EEF1F8,#EEF1F8 4px,#c9d2e2 4px,#c9d2e2 8px);"></div>
+                <div class="el-text"><strong>Texture</strong><span>How a surface feels, or looks like it would feel. Real (you can touch it) or implied (painted to fool the eye).</span></div>
+            </div>
+        </div>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; HELPFUL TO KNOW</div>
+            <div class="cb">Three of these elements are the secret to making flat paper look three-dimensional: <strong>value</strong> (light and shadow), <strong>space</strong> (overlap and size), and <strong>form</strong> (the illusion of volume). You will practice all three this quarter, starting with your dream room.</div>
+        </div>
+
+        <h3 style="font-size: 20px; color: #0e1c42; margin: 18px 0 8px 0;">Value: the workhorse element</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Of the seven, <strong>value</strong> does the most heavy lifting. A <strong>value scale</strong> runs from the lightest light to the darkest dark, with even steps in between. Squint at any photograph and color drops away, but the values remain. That is why a black-and-white photo still reads perfectly.</p>
+        <div class="value-scale">
+            <div style="background:#ffffff"></div><div style="background:#e2e2e2"></div><div style="background:#bdbdbd"></div><div style="background:#8a8a8a"></div><div style="background:#575757"></div><div style="background:#2b2b2b"></div><div style="background:#000000"></div>
+        </div>
+        <p style="font-size: 14px; color: #6b7a99; margin-top: 0;">A 7-step value scale, lightest to darkest. You will draw your own in the Week 1 sketch.</p>
+
+        <figure class="art-fig">
+            <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Shadows_Across_Vavilov_Crater_(art002e009282).jpg?width=700" alt="A stark photograph of a lunar crater lit from one side, showing a bright sunlit rim and a deep black shadow pooling across the crater floor." />
+            <figcaption>NASA Artemis II crew, <em>Shadows Across Vavilov Crater</em>, April 6, 2026. Photograph taken from lunar orbit. NASA. Public domain (U.S. government work). Source: <a href="https://commons.wikimedia.org/wiki/File:Shadows_Across_Vavilov_Crater_(art002e009282).jpg">Wikimedia Commons</a></figcaption>
+        </figure>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">No pencil touched this crater. Low, raking sunlight did all the work: the rim catches full light, the far wall drops to a value near pure black, and the slopes in between step through every value on the scale above. This is value's real job, on the moon or on your paper: it is the only element that can turn a flat circle into a hole in the ground, or a flat shape into a bed you could lie down in.</p>
+    </div>
+
+    <!-- CONTENT CARD: WATCH IT WORK (DAIJ) -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; WATCH IT WORK</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Artists and critics look at art in a deliberate order, so that judgment is earned and not just blurted. The four steps spell <strong>DAIJ</strong>: Describe, Analyze, Interpret, Judge. Watch it applied to Van Gogh's <em>The Bedroom</em>. You will use the same steps in your VR critique this week.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Describe (just the facts)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A small room. A wooden bed with red blankets. Two chairs, two pillows, a window, framed pictures on a blue wall, a washstand. The floor is a tilted reddish-brown.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Analyze (how is it built?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Bold dark <strong>lines</strong> outline every object. The floorboards rush toward the window so the room feels deep but also tips toward us: that is <strong>space</strong> at work. Large, simple <strong>shapes</strong> keep it calm, and the blue walls set off the warm reds and yellows, a deliberate <strong>color</strong> contrast.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Interpret (what is it saying?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Van Gogh said he wanted the room to express rest. Yet the tilting floor and the empty second chair can read as loneliness. Both are fair, because the evidence supports both.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Judge (does it succeed?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">It succeeds: with seven simple elements and no fancy detail, Van Gogh built a room you feel before you can explain. That is the goal of this whole course.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; NAME THE ELEMENT</div>
+            <div class="widget-question">Read each prompt, commit to an answer, then check it.</div>
+            <div class="widget-row" data-correct="space" data-hint="Think about what makes the room feel deep rather than flat. Try again.">
+                <div class="widget-row-prompt">The floorboards rush toward the window, making the room feel deep. Which element is Van Gogh leaning on most?</div>
+                <div class="widget-options">
+                    <button data-choice="texture">Texture</button>
+                    <button data-choice="value">Value</button>
+                    <button data-choice="space" data-fb="Yes. Converging lines that build depth are a space technique called linear perspective. You will build a whole unit on it later this year.">Space</button>
+                    <button data-choice="color">Color</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="value" data-hint="Which element makes the bedposts look round and solid rather than flat? Try again.">
+                <div class="widget-row-prompt">The bedposts look round and solid, lighter on one side and darker on the other. Which element does that?</div>
+                <div class="widget-options">
+                    <button data-choice="line">Line</button>
+                    <button data-choice="value" data-fb="Right. Light-to-dark shading is value, and value is what turns a flat shape into a believable form.">Value</button>
+                    <button data-choice="color">Color</button>
+                    <button data-choice="texture">Texture</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+
+        <details>
+            <summary>&#9654;&nbsp; Try it in your notebook: name one more place Van Gogh uses VALUE, then reveal a check.</summary>
+            <div class="ac-body">Write your answer before you open this. One strong answer: the shadow under the bed, and the darker washstand drawer fronts, where value separates one object from the next and grounds them in the room.</div>
+        </details>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI AND YOUR DREAM ROOM</div>
+        <div class="cb">An AI image generator can produce a picture of a "dream room" from a text prompt in seconds, and it can be a quick way to gather ideas or moods. It cannot make the seven decisions this project is teaching you to make: where your light comes from, which shapes carry the eye, how value builds depth. Those choices, and the drawing itself, are the work being graded here.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Elements of Art</strong>The 7 basic tools: line, shape, form, space, value, color, texture.</div>
+            <div class="vocab-card"><strong>Line</strong>A path made by a moving point; carries direction and energy.</div>
+            <div class="vocab-card"><strong>Shape</strong>A flat, enclosed area; geometric or organic.</div>
+            <div class="vocab-card"><strong>Form</strong>The illusion of a 3-D object (height, width, volume).</div>
+            <div class="vocab-card"><strong>Space</strong>The area within, around, and between objects; creates depth.</div>
+            <div class="vocab-card"><strong>Value</strong>The lightness or darkness of a surface.</div>
+            <div class="vocab-card"><strong>Value Scale</strong>A stepped range from lightest to darkest.</div>
+            <div class="vocab-card"><strong>Color</strong>Light seen as hue, value, and intensity.</div>
+            <div class="vocab-card"><strong>Texture</strong>How a surface feels or appears to feel; real or implied.</div>
+            <div class="vocab-card"><strong>Composition</strong>How the parts of an artwork are arranged.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Sketch: Value Scale and Element Hunt</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Draw a 5-step value scale and label the elements in a room around you. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>VR Session: Element Gallery Critique</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Choose a real artwork, bring it into your VR space, and run DAIJ on it. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: The Elements of Art</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Studio Project: Design Your Dream Room plus Artist Statement</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Design an interior using all 7 elements. Your one graded artwork this cycle.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Seven elements. That is the whole toolkit. Everything you make this year is some combination of these, used on purpose. Van Gogh built a room you can feel with them. This week, so will you.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; 2-D STUDIO ART &middot; Quarter 1 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Unit 1 &middot; The Elements of Art</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork shown is in the public domain; see caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

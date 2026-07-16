@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2-D Studio Art &mdash; Unit 9: Notan, The Space Between</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .value-scale { display: flex; height: 40px; border-radius: 6px; overflow: hidden; margin: 10px 0 4px; border: 1px solid #D0D9E8; }
+    .value-scale div { flex: 1; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">2-D STUDIO ART</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Unit</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Unit 9 of 16</div>
+        <div style="font-size: 12px; color: #666;">Space &amp; Composition</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Space</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Studio Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Notan Design</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Cycle Length</div>
+        <div style="font-size: 16px; color: #0e1c42;">2 weeks</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">UNIT 9</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Notan: The Space Between</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Today's Focus -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">The empty parts of a picture are not nothing. So what is the space doing while you are busy looking at the objects?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">This unit is about the element of space, and one idea in particular: that the light areas and the dark areas of a design carry equal weight. Japanese artists gave this idea a name, notan. Once you can see it, you cannot stop seeing it.</div>
+    </div>
+
+    <!-- CONTENT CARD: LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Before we name anything, just look. Spend a full minute with the woodblock print below. Let your eye travel from the wave, to the boats, to the sky, and back.</p>
+
+        <figure class="art-fig">
+            <img src="https://images.metmuseum.org/CRDImages/as/original/DP141063.jpg" alt="The Great Wave off Kanagawa by Hokusai: a towering curling blue wave with clawed foam reaches over three small boats, with the small snow-capped peak of Mount Fuji in the distance and a pale empty sky." />
+            <figcaption>Katsushika Hokusai (Japanese, 1760 to 1849), <em>Under the Wave off Kanagawa (The Great Wave)</em>, from Thirty-six Views of Mount Fuji, ca. 1830 to 32. Woodblock print; ink and color on paper. The Metropolitan Museum of Art, Rogers Fund, 1914. Public domain (CC0). Source: <a href="https://www.metmuseum.org/art/collection/search/36491">metmuseum.org/art/collection/search/36491</a></figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This is one of the most reproduced images on earth, and the reason is not just the wave. Look at how much of the print is empty. The pale sky takes up the whole top. Three long boats sit low, almost swallowed. Far off and tiny, the snowy peak of Mount Fuji holds still while the water rears up around it. The full areas and the empty areas are working together.</p>
+
+        <div class="callout c-art">
+            <div class="ck">&#128172; WONDER FIRST</div>
+            <div class="cb">Cover the wave with your hand for a moment and look only at the empty sky and the small mountain. Does the print fall apart, or does the quiet part hold its own? Keep your answer in mind. By the end of this lesson you will have a word for what that emptiness is doing.</div>
+        </div>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">When you look at this print, what pulls at your attention?</div>
+            <div class="widget-options">
+                <button data-response="Good. Now notice that the wave only feels huge because so much calm, empty space sits around it.">The size of the wave</button>
+                <button data-response="Good. The boats read as small and in danger partly because the empty water and sky dwarf them.">The tiny boats in danger</button>
+                <button data-response="Good. The wide pale sky is empty on purpose. That emptiness is part of the design, not leftover paper.">The wide empty sky</button>
+                <button data-response="Good. Mount Fuji is small and quiet, yet it anchors the whole scene from inside all that motion.">The distant little mountain</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+        <p style="font-size: 15px; color: #6b7a99;">Every one of those answers depends on the empty areas as much as the full ones. That is the lesson hiding in plain sight. Now let us name it.</p>
+    </div>
+
+    <!-- CONTENT CARD: NAME WHAT YOU SEE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; NAME WHAT YOU SEE</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The element at work here is <strong>space</strong>: the area within, around, and between the things in a picture. Artists split space into two jobs.</p>
+
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="80"><rect x="0" y="0" width="200" height="80" fill="#EEF1F8"/><circle cx="100" cy="40" r="26" fill="#0E1C42"/></svg></div>
+                <div class="el-text"><strong>Positive space</strong><span>The area the object itself takes up. Here, the dark circle. It is the thing you were told to look at.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="80"><rect x="0" y="0" width="200" height="80" fill="#0E1C42"/><circle cx="100" cy="40" r="26" fill="#EEF1F8"/></svg></div>
+                <div class="el-text"><strong>Negative space</strong><span>The area around and between objects. Easy to ignore, but it has its own shape and its own weight.</span></div>
+            </div>
+        </div>
+
+        <h3 style="font-size: 20px; color: #0e1c42; margin: 18px 0 8px 0;">Figure and ground</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The thing your eye reads as the object is the <strong>figure</strong>. The surface it sits on is the <strong>ground</strong>. Usually they stay put: figure in front, ground behind. But a designer can build an image where they trade places, so the empty area suddenly reads as a shape of its own. Look at the panel below and let your eye switch back and forth.</p>
+
+        <div class="art-fig">
+            <svg width="320" height="150" style="max-width:100%; border:1px solid #D0D9E8; border-radius:6px; background:#fff;">
+                <rect x="0" y="0" width="320" height="150" fill="#0E1C42"/>
+                <path d="M120 20 C120 20 110 45 110 60 C110 75 124 80 128 95 C131 108 122 120 122 130 L160 130 L160 20 Z" fill="#EEF1F8"/>
+                <path d="M200 20 C200 20 210 45 210 60 C210 75 196 80 192 95 C189 108 198 120 198 130 L160 130 L160 20 Z" fill="#EEF1F8"/>
+            </svg>
+            <figcaption>Two pale faces in profile, or one dark vase in the center? The same edges build both. When the dark is figure you see a vase; when the light is figure you see faces. This is the figure-ground flip.</figcaption>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">When the negative space stops being a background and becomes its own readable shape, designers say the negative space is "active." A logo that hides an arrow in the gap between two letters is doing exactly this.</p>
+
+        <div class="art-fig">
+            <svg width="320" height="150" style="max-width:100%; border:1px solid #D0D9E8; border-radius:6px; background:#fff;">
+                <rect x="0" y="0" width="320" height="150" fill="#fff"/>
+                <path d="M40 30 L120 30 L120 120 L40 120 Z" fill="#1B8A7A"/>
+                <path d="M200 30 L280 30 L280 120 L200 120 Z" fill="#1B8A7A"/>
+                <polygon points="135,75 175,50 175,65 185,65 185,85 175,85 175,100" fill="#fff" stroke="#D9583B" stroke-width="2"/>
+            </svg>
+            <figcaption>Two simple green blocks. The white gap between them is shaped into an arrow. The empty space is now carrying a message of its own.</figcaption>
+        </div>
+
+        <h3 style="font-size: 20px; color: #0e1c42; margin: 18px 0 8px 0;">A real symbol built the very same way</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The figure-ground flip above is a classroom trick. This next image is a real, ancient one that people have carried and worn for thousands of years, built on the identical idea, and taken a step further.</p>
+
+        <figure class="art-fig" style="max-width:220px; margin-left:auto; margin-right:auto;">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/3c/Yin_and_Yang_symbol.svg" alt="The Yin and Yang symbol: a circle divided by an S-curve into one black half and one white half, with a small white dot inside the black half and a small black dot inside the white half." />
+            <figcaption>Taijitu (Yin and Yang symbol). Traditional Chinese philosophical symbol, origin uncertain, long associated with Daoist thought about balance and interdependence. This is a modern redrawing of the traditional design, released into the public domain. Source: <a href="https://commons.wikimedia.org/wiki/File:Yin_and_Yang_symbol.svg">commons.wikimedia.org/wiki/File:Yin_and_Yang_symbol.svg</a>.</figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">This is not a piece of clip art. It is the <strong>Taijitu</strong>, the Yin-Yang symbol, one of the oldest and most recognized figure-ground designs in the world. Notice two things. First, the black half and the white half are exactly equal in area: perfect positive/negative balance, the same balance you are learning to build in your own notan work. Second, look closer: a small dot of white sits inside the black half, and a small dot of black sits inside the white half. Each side carries a seed of its opposite. That is figure-ground pushed one step further than the vase-or-faces trick above: here, positive and negative are not just balanced, they are shown to depend on each other.</p>
+
+        <h3 style="font-size: 20px; color: #0e1c42; margin: 18px 0 8px 0;">Notan: the harmony of light and dark</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Notan</strong> is a Japanese word for the balance and interplay of light and dark in a design. The idea is that the light masses and the dark masses are partners. Neither one is just filler for the other. A strong notan reads clearly even shrunk to a thumbnail, because the light and dark shapes are arranged on purpose. Drag your eye across the demo below: black and white, sharing the work evenly.</p>
+
+        <div class="art-fig">
+            <svg width="360" height="120" style="max-width:100%; border:1px solid #D0D9E8; border-radius:6px;">
+                <rect x="0" y="0" width="120" height="120" fill="#0E1C42"/>
+                <rect x="120" y="0" width="120" height="120" fill="#fff"/>
+                <rect x="240" y="0" width="120" height="120" fill="#0E1C42"/>
+                <path d="M0 0 L60 0 L0 60 Z" fill="#fff"/>
+                <path d="M120 120 L60 120 L120 60 Z" fill="#0E1C42"/>
+                <circle cx="180" cy="60" r="34" fill="#0E1C42"/>
+                <circle cx="180" cy="60" r="16" fill="#fff"/>
+                <path d="M240 0 L300 0 L240 60 Z" fill="#fff"/>
+                <path d="M360 120 L300 120 L360 60 Z" fill="#fff"/>
+            </svg>
+            <figcaption>A notan study in two values only. There is no gray, no shading, no color. The whole design lives in how the black shapes and the white shapes fit against each other.</figcaption>
+        </div>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; HELPFUL TO KNOW</div>
+            <div class="cb">Squint at any artwork and detail melts away, leaving only the big light shapes and the big dark shapes. That squint test is the fastest way to check a notan. If the design still reads when blurry, the light and dark are balanced. If it turns to mush, they are not.</div>
+        </div>
+
+        <h3 style="font-size: 20px; color: #0e1c42; margin: 18px 0 8px 0;">Notan is not only for paper: pattern in Japanese textiles</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Hokusai's generation of print designers did not invent the idea of balancing full areas against empty ones. Japanese textile makers of the same Edo period built the identical balance into cloth, arranging a dyed pattern (the positive space) against the plain silk ground (the negative space) so that a whole robe reads clearly at a glance, the same way a strong print does.</p>
+
+        <figure class="art-fig">
+            <img src="https://images.metmuseum.org/CRDImages/as/original/2001_428_50_F.JPG" alt="A Japanese kosode robe of the Edo period, patterned with a yuzen-dyed and hand-painted design concentrated across the lower half of the garment against a plain silk ground." />
+            <figcaption>Kosode (robe). Japan, Edo period (1615 to 1868). Silk, yuzen-dyed and hand-painted. The Metropolitan Museum of Art, accession 2001.428.50. Public domain (CC0). Source: <a href="https://www.metmuseum.org/art/collection/search/61845">metmuseum.org/art/collection/search/61845</a>.</figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The maker of this kosode is not recorded by name, which is typical of textile work from this period; it is attributed to the culture and period, Edo-period Japan, rather than to an individual. Notice how the dyed pattern is concentrated in certain areas and left open in others, exactly the positive/negative decision you are practicing this week, just worked in cloth and dye instead of ink and paper.</p>
+    </div>
+
+    <!-- CONTENT CARD: WATCH IT WORK (DAIJ) -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; WATCH IT WORK</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Critics read art in a deliberate order so that judgment is earned, not blurted. The four steps spell <strong>DAIJ</strong>: Describe, Analyze, Interpret, Judge. Watch them applied to Hokusai's <em>Great Wave</em>, with our eye on positive and negative space. You will run the same steps in your VR critique this week, on a print you choose yourself.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Describe (just the facts)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A huge blue wave curls from the left, its foam breaking into clawed fingers. Three narrow boats full of rowers sit in the troughs below. In the distance, small and pale, rises the snow-capped cone of Mount Fuji. The upper third is empty sky.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Analyze (how is it built?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The wave and boats are the positive space, dense and busy. The sky is the negative space, wide and quiet, and it makes the wave feel even larger by contrast. Hokusai sets the small triangle of Fuji against the large curl of the wave, so the empty distance and the crowded foreground balance. The light foam and the dark troughs trade across the print, a clear notan of just a few values.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Interpret (what is it saying?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The emptiness reads as the vast indifference of the sea and sky. The tiny boats and the distant mountain feel fragile inside all that open space. The negative space is doing the emotional work.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Judge (does it succeed?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">It succeeds completely. With a handful of shapes and a great deal of well-managed empty space, Hokusai built an image the whole world recognizes. The space is not background. It is half the picture.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; READ THE SPACE</div>
+            <div class="widget-question">Read each prompt, commit to an answer in your head, then check it.</div>
+            <div class="widget-row" data-correct="negative" data-hint="Think about which part is the empty area around and between the objects. Try again.">
+                <div class="widget-row-prompt">The wide pale sky at the top of the Great Wave, with nothing drawn in it, is an example of which kind of space?</div>
+                <div class="widget-options">
+                    <button data-choice="positive">Positive space</button>
+                    <button data-choice="negative" data-fb="Right. The empty sky is negative space, and Hokusai uses it on purpose to make the wave feel enormous.">Negative space</button>
+                    <button data-choice="texture">Texture</button>
+                    <button data-choice="form">Form</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="notan" data-hint="It is the Japanese word for the balance of light masses and dark masses. Try again.">
+                <div class="widget-row-prompt">A design that works in two values only, where the light shapes and dark shapes are balanced on purpose, is built on the principle of:</div>
+                <div class="widget-options">
+                    <button data-choice="notan" data-fb="Yes. Notan is the harmony of light and dark, and a good notan reads clearly even as a tiny thumbnail.">Notan</button>
+                    <button data-choice="hue">Hue</button>
+                    <button data-choice="line">Line</button>
+                    <button data-choice="value">A single value</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+
+        <details>
+            <summary>&#9654;&nbsp; Try it in your notebook: name one place in the Great Wave where the negative space becomes its own shape, then reveal a check.</summary>
+            <div class="ac-body">Write your answer before you open this. One strong answer: the curved pockets of open sky trapped inside the wave's curl. That trapped emptiness has a clear shape of its own, so the negative space there is active, not just leftover.</div>
+        </details>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI AND EMPTY SPACE</div>
+        <div class="cb">Image tools can fill or extend the empty areas of a picture automatically, painting in sky or background to match what is already there. That fill is a guess about what looks plausible. It is not a decision about how much emptiness the design needs or how the light and dark should balance. Choosing where the space goes, and what it weighs against, is the judgment this notan project is teaching you to make.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Space</strong>The area within, around, and between the objects in an artwork.</div>
+            <div class="vocab-card"><strong>Positive space</strong>The area an object or figure takes up.</div>
+            <div class="vocab-card"><strong>Negative space</strong>The empty area around and between objects; it has its own shape.</div>
+            <div class="vocab-card"><strong>Figure</strong>The object your eye reads as the main shape.</div>
+            <div class="vocab-card"><strong>Ground</strong>The surface or background the figure sits on.</div>
+            <div class="vocab-card"><strong>Figure-ground</strong>The relationship between figure and ground; it can flip.</div>
+            <div class="vocab-card"><strong>Taijitu (Yin-Yang)</strong>A traditional Chinese symbol of two balanced, interdependent halves; a real-world figure-ground design.</div>
+            <div class="vocab-card"><strong>Notan</strong>The Japanese principle of the harmony and balance of light and dark.</div>
+            <div class="vocab-card"><strong>Ukiyo-e</strong>Japanese woodblock prints of the "floating world," ca. 1600s to 1800s.</div>
+            <div class="vocab-card"><strong>Woodblock print</strong>An image printed from a carved block of wood inked by hand.</div>
+            <div class="vocab-card"><strong>Kosode</strong>A traditional Japanese robe, an ancestor of the modern kimono.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Sketch: Notan Thumbnail Studies</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Draw 2 to 3 small black-and-white compositions, balancing positive and negative space. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>VR Session: Japanese Art Gallery Critique</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Choose a real woodblock print from a short list (or your own approved pick), bring it into your VR space, run DAIJ on it, and build a positive/negative composition. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Japanese Art and Space</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Studio Project: Notan Design plus Artist Statement</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Cut shapes from a black square and flip them onto white. Your one graded artwork this cycle.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Empty space is never empty. The light areas and the dark areas of a design carry equal weight, and arranging them on purpose is the whole game. Hokusai used a wide quiet sky to make one wave feel like the ocean. A Yin-Yang symbol and a dyed silk robe show the same idea holding true far outside the print shop. This week, you will cut and flip your own balance of light and dark.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; 2-D STUDIO ART &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Unit 9 &middot; Notan: The Space Between</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork shown is in the public domain; see caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

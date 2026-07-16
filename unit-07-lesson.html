@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>2-D Studio Art &mdash; Unit 7: Van Gogh and the Texture of Paint</title>
+<style>
+    body { margin: 0; padding: 0; font-family: "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: #f4f6fa; }
+    .canvas-frame { max-width: 1100px; margin: 0 auto; background: #ffffff; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+
+    /* ===== WIDGET CSS — from optima-lesson-format/assets/lesson-interactive-template.html (byte-consistent) ===== */
+    .optima-widget { background: linear-gradient(135deg, #E8F6FB 0%, #F4F9FC 100%); border: 1px solid #C5DCE5; border-left: 5px solid #2196D0; border-radius: 8px; padding: 18px 22px; margin: 18px 0; }
+    .widget-kicker { font-size: 11px; color: #1B6A94; margin-bottom: 10px; letter-spacing: 0.4px; }
+    .widget-question { font-size: 17px; color: #0E1C42; margin-bottom: 14px; line-height: 1.55; }
+    .widget-row { background: #FFFFFF; border: 1px solid #D0D9E8; border-radius: 6px; padding: 12px 14px; margin-bottom: 10px; }
+    .widget-row-prompt { font-size: 15px; color: #0E1C42; margin-bottom: 8px; line-height: 1.5; font-style: italic; }
+    .widget-options { display: flex; flex-wrap: wrap; gap: 8px; }
+    .widget-options button { background: #FFFFFF; border: 1.5px solid #D0D9E8; border-radius: 8px; padding: 8px 14px; font-size: 14px; color: #0E1C42; cursor: pointer; transition: all 0.15s; font-family: inherit; }
+    .widget-options button:hover { background: #F4F6FA; border-color: #55C8E8; }
+    .widget-options button.selected { background: #0E1C42; color: #FFFFFF; border-color: #0E1C42; }
+    .widget-options button.correct { background: #D8F0DD; border-color: #2A9D5C; color: #1A6B3D; }
+    .widget-options button.incorrect { background: #FDECEC; border-color: #C0392B; color: #8A1F16; }
+    .widget-feedback { background: #FFFFFF; border-left: 3px solid #C7922C; padding: 10px 14px; font-size: 15px; color: #1a2340; line-height: 1.55; margin: 10px 0; display: none; border-radius: 4px; }
+    .widget-feedback.show { display: block; }
+    .row-feedback { padding: 8px 12px; margin-top: 8px; font-size: 14px; border-radius: 4px; line-height: 1.5; }
+    .row-feedback.correct { background: #D8F0DD; border-left: 3px solid #2A9D5C; color: #1A6B3D; }
+    .row-feedback.incorrect { background: #FDECEC; border-left: 3px solid #C0392B; color: #8A1F16; }
+    .widget-reset { background: transparent; border: 1px solid #C7922C; color: #C7922C; border-radius: 6px; padding: 6px 12px; font-size: 12px; cursor: pointer; font-family: inherit; margin-top: 6px; }
+    .widget-reset:hover { background: #FDF3E3; }
+
+    /* ===== Art-course components (layered on the brand; teal/coral are activity accents only) ===== */
+    .art-fig { margin: 14px 0; text-align: center; }
+    .art-fig img { max-width: 100%; height: auto; border-radius: 6px; border: 1px solid #D0D9E8; }
+    .art-fig figcaption { font-size: 13px; color: #666; margin-top: 8px; line-height: 1.5; }
+    .art-fig figcaption a { color: #1B6A94; }
+    .el-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 12px; margin: 16px 0; }
+    .el-card { border: 1px solid #D0D9E8; border-radius: 8px; overflow: hidden; }
+    .el-demo { height: 80px; display: flex; align-items: center; justify-content: center; }
+    .el-text { padding: 10px 13px; }
+    .el-text strong { color: #167567; display: block; margin-bottom: 3px; font-size: 16px; }
+    .el-text span { font-size: 14px; color: #1a2340; }
+    .value-scale { display: flex; height: 40px; border-radius: 6px; overflow: hidden; margin: 10px 0 4px; border: 1px solid #D0D9E8; }
+    .value-scale div { flex: 1; }
+    .callout { border-radius: 6px; padding: 14px 20px; margin: 16px 0; }
+    .callout .ck { font-size: 11px; margin-bottom: 8px; letter-spacing: 0.5px; }
+    .callout .cb { font-size: 16px; line-height: 1.6; color: #0E1C42; }
+    .c-help { background: #E8F6FB; border-left: 5px solid #2196D0; border-top: 3px solid #55C8E8; }
+    .c-help .ck { color: #1B6A94; }
+    .c-warn { background: #FDECEC; border-left: 5px solid #C0392B; border-top: 3px solid #E74C3C; }
+    .c-warn .ck { color: #8A1F16; }
+    .c-art { background: #E6F4F1; border-left: 5px solid #1B8A7A; }
+    .c-art .ck { color: #167567; }
+    .next-item { display: flex; align-items: flex-start; gap: 14px; margin-bottom: 14px; }
+    .next-item .num { min-width: 30px; height: 30px; border-radius: 50%; color: #fff; font-size: 14px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .num.learn { background: #1B8A7A; }
+    .num.create { background: #D9583B; }
+    .vocab-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 10px; }
+    .vocab-card { background: #EEF1F8; border-radius: 6px; padding: 10px 13px; font-size: 14px; color: #1a2340; }
+    .vocab-card strong { color: #0E1C42; display: block; margin-bottom: 2px; }
+    details { background: #FFFFFF; border: 1px solid #D0D9E8; border-left: 4px solid #C7922C; border-radius: 6px; padding: 12px 18px; margin: 14px 0; }
+    details summary { font-size: 16px; color: #0E1C42; cursor: pointer; }
+    details .ac-body { font-size: 16px; color: #1a2340; margin-top: 10px; padding-top: 10px; border-top: 1px solid #EEF1F8; line-height: 1.6; }
+</style>
+</head>
+<body>
+<div class="canvas-frame">
+
+<!-- ===== HEADER ===== -->
+<div style="background: #0E1C42; border-bottom: 5px solid #55C8E8; padding: 22px 34px;">
+    <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 10px;">
+        <div style="width: 52px; height: 52px; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center; flex-shrink: 0;"><img src="https://raw.githubusercontent.com/optimaondemand/optima-assets/eeb0b335630058906d52f478028361d352253a93/images/Optima%20Final%20Circle%20-%20Owl%20Only.png" alt="Optima Academy" style="width: 50px; height: 40px; object-fit: contain;" /></div>
+        <div>
+            <div style="font-size: 28px; color: #ffffff; line-height: 1.2;">Optima Academy Online</div>
+            <div style="font-size: 12px; color: #55c8e8;">An Education Experience Company</div>
+        </div>
+    </div>
+    <div style="font-size: 36px; color: #ffffff; margin-bottom: 6px;">2-D STUDIO ART</div>
+</div>
+
+<!-- ===== METADATA STRIP ===== -->
+<div style="background: #FFFFFF; border-bottom: 2px solid #D0D9E8; display: flex; flex-wrap: wrap;">
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Quarter / Unit</div>
+        <div style="font-size: 17px; color: #0e1c42;">Q2 &middot; Unit 7 of 16</div>
+        <div style="font-size: 12px; color: #666;">Texture</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Focus</div>
+        <div style="font-size: 17px; color: #0e1c42;">Texture</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px; border-right: 1px solid #D0D9E8;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Studio Project</div>
+        <div style="font-size: 17px; color: #0e1c42; font-style: italic;">Texture Animal Drawing</div>
+    </div>
+    <div style="flex: 1; min-width: 140px; padding: 12px 16px;">
+        <div style="font-size: 11px; color: #6b7a99; margin-bottom: 4px;">Cycle Length</div>
+        <div style="font-size: 16px; color: #0e1c42;">2 weeks</div>
+    </div>
+</div>
+
+<!-- ===== BODY WRAPPER ===== -->
+<div style="padding: 24px 34px;">
+
+    <!-- Lavender title strip -->
+    <div style="background: #EEF1F8; border-left: 5px solid #0E1C42; border-radius: 7px; padding: 18px 22px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #0e1c42; margin-bottom: 6px;">UNIT 7</div>
+        <div style="font-size: 22px; color: #0e1c42; margin-bottom: 4px;">Van Gogh and the Texture of Paint</div>
+        <div style="font-size: 16px; color: #666;">Lesson</div>
+    </div>
+
+    <!-- Today's Focus -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128214; ESSENTIAL QUESTION</div>
+        <div style="font-size: 20px; color: #0e1c42; font-style: italic; margin-bottom: 10px;">A drawing is flat and a sky is not solid. So how does an artist make a surface look rough, soft, ridged, or fuzzy when there is nothing under your finger but paper?</div>
+        <div style="font-size: 18px; color: #1a2340; line-height: 1.65;">This unit is about texture, the element that tells your eye how a surface would feel. You will learn the difference between texture you can actually touch and texture that is only an illusion, and you will build a toolkit of marks that fake any surface you want.</div>
+    </div>
+
+    <!-- CONTENT CARD: LOOK FIRST -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128064; PART 1 &middot; LOOK FIRST</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Before we name anything, just look. Spend a full minute with the painting below. Imagine running a finger across the sky. What would it feel like?</p>
+
+        <figure class="art-fig">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg/1280px-Van_Gogh_-_Starry_Night_-_Google_Art_Project.jpg" alt="The Starry Night by Vincent van Gogh: a swirling night sky full of large glowing stars and a spiraling moon above a quiet town, with a dark cypress tree rising in the foreground." />
+            <figcaption>Vincent van Gogh (Dutch, 1853 to 1890), <em>The Starry Night</em>, Saint R&eacute;my, June 1889. Oil on canvas, 29 x 36 1/4 in. (73.7 x 92.1 cm). The Museum of Modern Art, New York (acquired 1941, through the Lillie P. Bliss Bequest, by exchange); verified collection record: <a href="https://www.moma.org/collection/works/79802">moma.org/collection/works/79802</a>. Public domain. Image source: Wikimedia Commons (Google Art Project scan).</figcaption>
+        </figure>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Van Gogh painted this from a window at an asylum in the south of France, mostly from memory. Look closely at the sky. It is not smooth at all. It is built from short, curling ribbons of thick paint that twist around the stars like water moving down a river. The paint sits up off the canvas in visible ridges. If you stood in front of the real painting in New York, you could see the shadows those ridges cast.</p>
+
+        <div class="callout c-art">
+            <div class="ck">&#128172; WONDER FIRST</div>
+            <div class="cb">The sky in this painting has two textures at once. There is the texture you would feel if you touched the canvas, and there is the texture your eye reads as swirling, churning air. Hold that idea. By the end of this lesson you will have a name for each one.</div>
+        </div>
+
+        <div class="optima-widget ow-reflect">
+            <div class="widget-kicker">&#128173; QUICK CHECK-IN &middot; NO WRONG ANSWER</div>
+            <div class="widget-question">If you could touch the surface of this painting, which word fits best?</div>
+            <div class="widget-options">
+                <button data-response="Good. Now hold onto why: the raised ridges of paint would feel bumpy and uneven under a finger.">Ridged and bumpy</button>
+                <button data-response="Good. Now hold onto why: even though the sky looks soft, the actual paint is built up thick and rough.">Smooth like glass</button>
+                <button data-response="Good. Now hold onto why: the curling strokes pile the paint up so the surface stands off the canvas.">Thick and crusty</button>
+                <button data-response="Good. Now hold onto why: each stroke is a separate ribbon of paint you could trace with a fingertip.">Made of grooves</button>
+            </div>
+            <div class="widget-feedback"></div>
+            <button class="widget-reset">Reset</button>
+        </div>
+        <p style="font-size: 15px; color: #6b7a99;">Most of those answers describe the real, touchable surface. But the painting also makes you feel a churning, windy sky that is not really there. That gap between what you could touch and what your eye sees is exactly what this unit is about.</p>
+    </div>
+
+    <!-- CONTENT CARD: NAME WHAT YOU SEE -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128218; PART 2 &middot; NAME WHAT YOU SEE</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;"><strong>Texture</strong> is the element of art that describes how a surface feels, or how it looks like it would feel. It comes in two kinds, and good artists use both on purpose.</p>
+
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><rect x="20" y="14" width="160" height="40" fill="#EEF1F8" stroke="#D0D9E8"/><path d="M28 46 Q40 22 54 46 Q68 22 82 46 Q96 22 110 46 Q124 22 138 46 Q152 22 166 46" stroke="#1B8A7A" stroke-width="4" fill="none"/></svg></div>
+                <div class="el-text"><strong>Actual texture</strong><span>The real, physical feel of a surface. Thick paint, a rough canvas, or layered material you could touch with a finger.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="68"><rect x="20" y="14" width="160" height="40" fill="#fff" stroke="#D0D9E8"/><g stroke="#0E1C42" stroke-width="1"><line x1="30" y1="20" x2="30" y2="48"/><line x1="38" y1="20" x2="38" y2="48"/><line x1="46" y1="20" x2="46" y2="48"/><line x1="54" y1="20" x2="54" y2="48"/><line x1="62" y1="20" x2="62" y2="48"/><line x1="70" y1="20" x2="70" y2="48"/></g><circle cx="120" cy="26" r="1.4" fill="#0E1C42"/><circle cx="130" cy="32" r="1.4" fill="#0E1C42"/><circle cx="124" cy="40" r="1.4" fill="#0E1C42"/><circle cx="138" cy="38" r="1.4" fill="#0E1C42"/><circle cx="146" cy="28" r="1.4" fill="#0E1C42"/></svg></div>
+                <div class="el-text"><strong>Implied texture</strong><span>Texture that is only an illusion. The paper stays flat, but marks trick your eye into seeing fur, bark, or stone.</span></div>
+            </div>
+        </div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 14px 0 10px 0;">When a painter loads the brush with thick paint so it stands up off the surface, that built-up ridge is called <strong>impasto</strong>. Van Gogh is famous for it. His skies and sunflowers carry real, touchable texture because the paint itself is sculpted. Impasto is one way to get actual texture.</p>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">In a pencil or pen drawing you cannot pile up material that way. Instead you fake the feel of a surface with repeated marks. This is called <strong>mark-making</strong>, and it is the heart of your project this cycle. Here are four of the most useful patterns.</p>
+
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="80"><g stroke="#0E1C42" stroke-width="1.2"><line x1="20" y1="18" x2="20" y2="62"/><line x1="30" y1="18" x2="30" y2="62"/><line x1="40" y1="18" x2="40" y2="62"/><line x1="50" y1="18" x2="50" y2="62"/><line x1="60" y1="18" x2="60" y2="62"/><line x1="70" y1="18" x2="70" y2="62"/><line x1="80" y1="18" x2="80" y2="62"/><line x1="90" y1="18" x2="90" y2="62"/><line x1="100" y1="18" x2="100" y2="62"/><line x1="110" y1="18" x2="110" y2="62"/><line x1="120" y1="18" x2="120" y2="62"/><line x1="130" y1="18" x2="130" y2="62"/><line x1="140" y1="18" x2="140" y2="62"/><line x1="150" y1="18" x2="150" y2="62"/><line x1="160" y1="18" x2="160" y2="62"/><line x1="170" y1="18" x2="170" y2="62"/><line x1="180" y1="18" x2="180" y2="62"/></g></svg></div>
+                <div class="el-text"><strong>Hatching</strong><span>A set of parallel lines all running the same way. Closer lines read as darker and denser.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="80"><g stroke="#0E1C42" stroke-width="1"><line x1="20" y1="18" x2="20" y2="62"/><line x1="34" y1="18" x2="34" y2="62"/><line x1="48" y1="18" x2="48" y2="62"/><line x1="62" y1="18" x2="62" y2="62"/><line x1="76" y1="18" x2="76" y2="62"/><line x1="90" y1="18" x2="90" y2="62"/><line x1="104" y1="18" x2="104" y2="62"/><line x1="118" y1="18" x2="118" y2="62"/><line x1="132" y1="18" x2="132" y2="62"/><line x1="146" y1="18" x2="146" y2="62"/><line x1="160" y1="18" x2="160" y2="62"/><line x1="174" y1="18" x2="174" y2="62"/><line x1="14" y1="24" x2="186" y2="24"/><line x1="14" y1="38" x2="186" y2="38"/><line x1="14" y1="52" x2="186" y2="52"/></g></svg></div>
+                <div class="el-text"><strong>Cross-hatching</strong><span>Two or more layers of hatching that cross. Each added layer deepens the shadow and the texture.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="80"><g fill="#0E1C42"><circle cx="30" cy="24" r="1.5"/><circle cx="44" cy="30" r="1.5"/><circle cx="38" cy="44" r="1.5"/><circle cx="54" cy="22" r="1.5"/><circle cx="60" cy="38" r="1.5"/><circle cx="72" cy="30" r="1.5"/><circle cx="80" cy="48" r="1.5"/><circle cx="92" cy="26" r="1.5"/><circle cx="100" cy="40" r="1.5"/><circle cx="112" cy="32" r="1.5"/><circle cx="120" cy="50" r="1.5"/><circle cx="132" cy="24" r="1.5"/><circle cx="140" cy="42" r="1.5"/><circle cx="150" cy="30" r="1.5"/><circle cx="160" cy="46" r="1.5"/><circle cx="170" cy="34" r="1.5"/></g></svg></div>
+                <div class="el-text"><strong>Stippling</strong><span>Texture built only from dots. More dots packed together read as darker; spread out, they read as light.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:#fff;"><svg width="200" height="80"><path d="M20 40 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0 q10 -16 20 0 q10 16 20 0" stroke="#0E1C42" stroke-width="1.2" fill="none"/><path d="M22 52 q12 -14 24 2 q12 14 24 -2 q12 -14 24 2 q12 14 24 -2 q12 -14 24 2" stroke="#0E1C42" stroke-width="1" fill="none"/><path d="M24 26 q8 -12 18 2 q10 12 22 -2 q10 -12 20 2 q10 12 22 -2 q10 -12 18 2" stroke="#0E1C42" stroke-width="1" fill="none"/></svg></div>
+                <div class="el-text"><strong>Scribbling</strong><span>Loose, tangled, looping lines. Great for matted fur, foliage, wool, or anything irregular and soft.</span></div>
+            </div>
+        </div>
+
+        <div class="callout c-help">
+            <div class="ck">&#128161; HELPFUL TO KNOW</div>
+            <div class="cb">All four of these marks control value as well as texture. Pack the marks tighter and the area grows darker; spread them out and it lightens. That is why a single technique like stippling can give you both the dark and the light of a surface. Texture and value travel together.</div>
+        </div>
+
+        <h3 style="font-size: 20px; color: #0e1c42; margin: 18px 0 8px 0;">One subject, many textures</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The fastest way to grow your skill is to put the marks side by side and compare. The strip below shows four textures from the same small toolkit. Notice that nothing here is colored or shaded by hand. Every shift in feel comes from the kind of mark and how densely it is packed.</p>
+        <div class="el-grid">
+            <div class="el-card">
+                <div class="el-demo" style="background:repeating-linear-gradient(90deg,#0E1C42,#0E1C42 1px,#fff 1px,#fff 6px);"></div>
+                <div class="el-text"><span>Even hatching reads as a flat, woven or grassy surface.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:repeating-linear-gradient(45deg,#0E1C42,#0E1C42 1px,#fff 1px,#fff 5px),repeating-linear-gradient(-45deg,#0E1C42,#0E1C42 1px,#fff 1px,#fff 5px);"></div>
+                <div class="el-text"><span>Cross-hatching reads as a denser, harder, shadowed surface.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:radial-gradient(#0E1C42 1px, transparent 1.4px); background-size:7px 7px;"></div>
+                <div class="el-text"><span>Stippling reads as grainy, sandy, or sponge-like.</span></div>
+            </div>
+            <div class="el-card">
+                <div class="el-demo" style="background:repeating-radial-gradient(circle at 30% 40%, #0E1C42 0 1px, transparent 1px 5px);"></div>
+                <div class="el-text"><span>Scattered marks read as soft, mottled, or fuzzy.</span></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- CONTENT CARD: WATCH IT WORK (DAIJ) -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128269; PART 3 &middot; WATCH IT WORK</div>
+
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">Artists and critics look at art in a deliberate order, so that judgment is earned and not just blurted. The four steps spell <strong>DAIJ</strong>: Describe, Analyze, Interpret, Judge. Watch it applied to Van Gogh's <em>The Starry Night</em>, with our eye on texture. You will use the same steps in your VR critique this week.</p>
+
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Describe (just the facts)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">A night sky over a small town. Eleven large, glowing stars and a bright crescent moon. A dark, flame-shaped tree rises along the left edge. A church spire points up from the village below. The whole sky moves in long, curling bands.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Analyze (how is it built?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The sky is built from short curved strokes of <strong>impasto</strong>, paint laid on so thick it stands up off the canvas as actual texture. Those same swirling strokes also create an <strong>implied texture</strong> of churning, windy air. The cypress tree is made of long upward licks of paint, while the village uses shorter, calmer dabs. The contrast between the restless sky and the still town is built almost entirely from how the marks move.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Interpret (what is it saying?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">The heavy, moving paint can read as a sky that is alive, full of energy and feeling, looming over a quiet, sleeping town. Some viewers read it as wonder, others as turmoil. Both are fair, because the brushwork supports both.</p>
+        <h3 style="font-size: 18px; color: #0e1c42; margin: 18px 0 6px 0;">Judge (does it succeed?)</h3>
+        <p style="font-size: 17px; color: #1a2340; line-height: 1.65; margin: 0 0 10px 0;">It succeeds. The texture is not decoration. The thick, moving paint is the feeling. You sense the energy of that sky before you can explain it, and that is exactly what texture, used on purpose, can do.</p>
+
+        <div class="optima-widget ow-select">
+            <div class="widget-kicker">&#9889; TRY IT &middot; NAME THE TEXTURE IDEA</div>
+            <div class="widget-question">Read each prompt, commit to an answer, then check it.</div>
+            <div class="widget-row" data-correct="impasto" data-hint="Which word names paint laid on thick enough to feel with a finger? Try again.">
+                <div class="widget-row-prompt">The paint in the sky stands up off the canvas in ridges you could touch. What is this thick, sculpted paint called?</div>
+                <div class="widget-options">
+                    <button data-choice="impasto" data-fb="Yes. Impasto is thick, raised paint. Because you could actually feel it, it is a kind of real, actual texture.">Impasto</button>
+                    <button data-choice="stippling">Stippling</button>
+                    <button data-choice="hatching">Hatching</button>
+                    <button data-choice="implied">Implied texture</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="implied" data-hint="The paper or canvas itself stays flat here. Which kind of texture is only an illusion? Try again.">
+                <div class="widget-row-prompt">In a pencil drawing, you make a surface look like rough tree bark even though the paper is perfectly smooth. This is an example of:</div>
+                <div class="widget-options">
+                    <button data-choice="actual">Actual texture</button>
+                    <button data-choice="impasto">Impasto</button>
+                    <button data-choice="implied" data-fb="Right. The paper stays flat, so the bark is an illusion built from marks. That is implied texture.">Implied texture</button>
+                    <button data-choice="value">Value scale</button>
+                </div>
+            </div>
+            <div class="widget-row" data-correct="crosshatch" data-hint="Which mark layers a second set of lines across the first to deepen a shadow? Try again.">
+                <div class="widget-row-prompt">You drew parallel lines, then drew a second set crossing over them to make the area darker and rougher. Which technique is this?</div>
+                <div class="widget-options">
+                    <button data-choice="stipple">Stippling</button>
+                    <button data-choice="crosshatch" data-fb="Right. Crossing a second layer of lines over the first is cross-hatching. Each layer adds darkness and density.">Cross-hatching</button>
+                    <button data-choice="scribble">Scribbling</button>
+                    <button data-choice="impasto">Impasto</button>
+                </div>
+            </div>
+            <button class="widget-reset">Reset</button>
+        </div>
+
+        <details>
+            <summary>&#9654;&nbsp; Try it in your notebook: name one surface in the real world you would draw with stippling, then reveal a check.</summary>
+            <div class="ac-body">Write your answer before you open this. Strong answers: sand, a sponge, an orange peel, stone, or the speckled coat of an animal. Anything grainy or pebbled reads well as dots, because the eye reads packed dots as a rough, broken surface.</div>
+        </details>
+    </div>
+
+    <!-- AI AWARENESS (factual) -->
+    <div class="callout c-warn">
+        <div class="ck">&#9888;&#65039; WORTH KNOWING &middot; AI AND TEXTURE</div>
+        <div class="cb">An image app can apply a "brushstroke" or "oil paint" filter to a photo in one tap, and it can imitate the look of impasto on screen. It cannot train your hand to build texture mark by mark, deciding where the fur is dense and where it thins, where a surface is rough and where it is smooth. Those decisions, and the drawing you make from them, are the skill being practiced and graded here.</div>
+    </div>
+
+    <!-- VOCABULARY -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 14px;">&#128221; VOCABULARY</div>
+        <div class="vocab-grid">
+            <div class="vocab-card"><strong>Texture</strong>How a surface feels, or appears it would feel.</div>
+            <div class="vocab-card"><strong>Actual texture</strong>The real, physical feel of a surface you could touch.</div>
+            <div class="vocab-card"><strong>Implied texture</strong>An illusion of texture on a flat surface, made with marks.</div>
+            <div class="vocab-card"><strong>Impasto</strong>Paint laid on thick enough to stand up off the surface as real texture.</div>
+            <div class="vocab-card"><strong>Mark-making</strong>The marks an artist uses to build texture, value, and surface.</div>
+            <div class="vocab-card"><strong>Hatching</strong>Parallel lines running the same direction.</div>
+            <div class="vocab-card"><strong>Cross-hatching</strong>Layers of hatching that cross to deepen value and texture.</div>
+            <div class="vocab-card"><strong>Stippling</strong>Texture and value built entirely from dots.</div>
+            <div class="vocab-card"><strong>Post-Impressionism</strong>A movement after Impressionism, including Van Gogh, that used bold color and visible, expressive brushwork.</div>
+            <div class="vocab-card"><strong>DAIJ</strong>The critique order: Describe, Analyze, Interpret, Judge.</div>
+        </div>
+    </div>
+
+    <!-- WHAT YOU'LL DO NEXT -->
+    <div style="background: #FFFFFF; border-top: 3px solid #0E1C42; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 16px;">&#10145;&#65039; WHAT YOU'LL DO NEXT (IN CANVAS)</div>
+        <div class="next-item"><div class="num learn">1</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Sketch: Texture Sampler</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Fill a 9-box grid, each box a different mark-made texture. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">2</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>VR Session: Brushwork Gallery Critique</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Choose a real textured artwork, pull it into your VR space, and run DAIJ on it yourself. Completion grade.</div></div></div>
+        <div class="next-item"><div class="num learn">3</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Quiz: Van Gogh and Texture</strong> &middot; Week 1</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">8 questions, auto-graded in Canvas.</div></div></div>
+        <div class="next-item"><div class="num create">4</div><div><div style="font-size: 18px; color: #0e1c42;"><strong>Studio Project: Texture Animal Drawing plus Artist Statement</strong> &middot; Week 2</div><div style="font-size: 16px; color: #1a2340; line-height: 1.55;">Divide an animal into sections and fill each with a different mark-made texture. Your one graded artwork this cycle.</div></div></div>
+    </div>
+
+    <!-- WRAP-UP -->
+    <div style="background: #FFFFFF; border-top: 3px solid #C7922C; border: 1px solid #D0D9E8; border-radius: 8px; padding: 20px 24px; margin-bottom: 20px;">
+        <div style="font-size: 11px; color: #c7922c; margin-bottom: 12px;">&#128170; THE BIG IDEA</div>
+        <p style="font-size: 18px; color: #1a2340; line-height: 1.65; margin: 0;">Texture is how a flat picture reaches out and tells your fingers what it would feel like. Van Gogh built his with real, thick paint. You will build yours with marks: hatching, cross-hatching, stippling, and scribbles. This week, you turn a handful of marks into fur, scales, and feathers.</p>
+    </div>
+
+</div>
+
+<!-- ===== FOOTER ===== -->
+<div style="background: #0E1C42; border-top: 3px solid #55C8E8; padding: 18px 34px; text-align: center;">
+    <div style="font-size: 18px; color: #ffffff; margin-bottom: 6px;"><span style="color: #55c8e8;">Optima Academy Online</span> &middot; 2-D STUDIO ART &middot; Quarter 2 &middot; Student Lesson Page</div>
+    <div style="font-size: 13px; color: rgba(255,255,255,0.65); margin-bottom: 4px;">Unit 7 &middot; Van Gogh and the Texture of Paint</div>
+    <div style="font-size: 12px; color: rgba(255,255,255,0.4);">&copy; Optima Academy Online &middot; An Education Experience Company. Artwork shown is in the public domain; see caption for source.</div>
+</div>
+
+</div>
+
+<!-- ===== WIDGET RUNTIME — from optima-lesson-format template. One delegated listener drives every engine. ===== -->
+<script>
+(function () {
+  document.addEventListener('click', function (e) {
+    var reset = e.target.closest('.widget-reset');
+    if (reset) {
+      var w = reset.closest('.optima-widget');
+      w.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      w.querySelectorAll('.widget-feedback').forEach(function (f) { f.classList.remove('show'); f.textContent = ''; });
+      w.querySelectorAll('.row-feedback').forEach(function (f) { f.remove(); });
+      return;
+    }
+    var rBtn = e.target.closest('.ow-reflect .widget-options button');
+    if (rBtn) {
+      var rw = rBtn.closest('.optima-widget');
+      rw.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected'); });
+      rBtn.classList.add('selected');
+      var fb = rw.querySelector('.widget-feedback');
+      fb.textContent = rBtn.dataset.response || '';
+      fb.classList.add('show');
+      return;
+    }
+    var sBtn = e.target.closest('.ow-select .widget-row .widget-options button');
+    if (sBtn) {
+      var row = sBtn.closest('.widget-row');
+      var correct = row.dataset.correct;
+      row.querySelectorAll('.widget-options button').forEach(function (b) { b.classList.remove('selected', 'correct', 'incorrect'); });
+      var right = sBtn.dataset.choice === correct;
+      sBtn.classList.add(right ? 'correct' : 'incorrect');
+      var text = right ? (sBtn.dataset.fb || row.dataset.fb || 'Right.') : (sBtn.dataset.fb || row.dataset.hint || 'Not quite. Try again.');
+      var rf = row.querySelector('.row-feedback') || row.appendChild(document.createElement('div'));
+      rf.className = 'row-feedback ' + (right ? 'correct' : 'incorrect');
+      rf.textContent = text;
+      return;
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
