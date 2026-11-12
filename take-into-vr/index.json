@@ -1,0 +1,103 @@
+{
+ "version": 1,
+ "module": "2-D Studio Art 1",
+ "made": "2026-11-12",
+ "lessons": [
+  {
+   "page": "unit-10-lesson.html",
+   "heading": "Module 10",
+   "title": "Monochromatic Color and Value",
+   "folder": "Module 10 - Monochromatic Color and Value",
+   "combined": {
+    "path": "Module 10 - Monochromatic Color and Value/Module 10 - all cards.pdf",
+    "bytes": 2685949
+   },
+   "files": [
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/01 - Anthropometry Princess Helena.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/01 - Anthropometry Princess Helena.jpg",
+     "activity": "More works to study",
+     "label": "Anthropometry: Princess Helena",
+     "bytes": 111802
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/02 - The Tetons and the Snake River, Grand Teton National Park, Wyoming.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/02 - The Tetons and the Snake River, Grand Teton National Park, Wyoming.jpg",
+     "activity": "More works to study",
+     "label": "The Tetons and the Snake River, Grand Teton National Park, Wyoming",
+     "bytes": 158195
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/03 - The Glorification of the Royal Hungarian Saints.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/03 - The Glorification of the Royal Hungarian Saints.jpg",
+     "activity": "More works to study",
+     "label": "The Glorification of the Royal Hungarian Saints",
+     "bytes": 256122
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/04 - Mount Williamson, the Sierra Nevada, from Manzanar, California.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/04 - Mount Williamson, the Sierra Nevada, from Manzanar, California.jpg",
+     "activity": "More works to study",
+     "label": "Mount Williamson, the Sierra Nevada, from Manzanar, California",
+     "bytes": 255654
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/05 - Universal Landscape (Illustration from Explodity).pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/05 - Universal Landscape (Illustration from Explodity).jpg",
+     "activity": "More works to study",
+     "label": "Universal Landscape (Illustration from \"Explodity\")",
+     "bytes": 411880
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/06 - Lascaux Hall of Bulls (left wall), Bulls, Horses and Deer.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/06 - Lascaux Hall of Bulls (left wall), Bulls, Horses and Deer.jpg",
+     "activity": "More works to study",
+     "label": "Lascaux: Hall of Bulls (left wall), Bulls, Horses and Deer",
+     "bytes": 310334
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/07 - Guernica, State II.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/07 - Guernica, State II.jpg",
+     "activity": "More works to study",
+     "label": "Guernica, State II",
+     "bytes": 208234
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/08 - Untitled (ANT 154).pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/08 - Untitled (ANT 154).jpg",
+     "activity": "More works to study",
+     "label": "Untitled (ANT 154)",
+     "bytes": 257826
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/More works to study/09 - Red-Figure Calyx-Krater.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/More works to study/09 - Red-Figure Calyx-Krater.jpg",
+     "activity": "More works to study",
+     "label": "Red-Figure Calyx-Krater",
+     "bytes": 188348
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/How value builds form/01 - Mother and Child.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/How value builds form/01 - Mother and Child.jpg",
+     "activity": "How value builds form",
+     "label": "Mother and Child",
+     "bytes": 133376
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/Module 10.02 VR-Critique/01 - Arrangement in Grey and Black No. 1 (Whistler's Mother).pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/Module 10.02 VR-Critique/01 - Arrangement in Grey and Black No. 1 (Whistler's Mother).jpg",
+     "activity": "Module 10.02 VR/Critique: Monochromatic Gallery Critique",
+     "label": "Arrangement in Grey and Black No. 1 (\"Whistler's Mother\")",
+     "bytes": 273088
+    },
+    {
+     "path": "Module 10 - Monochromatic Color and Value/Module 10.02 VR-Critique/02 - Nocturne in Black and Gold The Falling Rocket.pdf",
+     "thumb": "thumbs/Module 10 - Monochromatic Color and Value/Module 10.02 VR-Critique/02 - Nocturne in Black and Gold The Falling Rocket.jpg",
+     "activity": "Module 10.02 VR/Critique: Monochromatic Gallery Critique",
+     "label": "Nocturne in Black and Gold: The Falling Rocket",
+     "bytes": 298088
+    }
+   ]
+  }
+ ]
+}

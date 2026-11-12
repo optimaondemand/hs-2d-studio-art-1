@@ -1,0 +1,135 @@
+{
+ "module": "2-D Studio Art 1",
+ "note": "Module 10 only. Every artwork the module shows: the lesson page's Artstor works, and the public-domain works pictured only in the Module 10.02 VR/Critique item. The owl logo is left out.",
+ "look": {
+  "accent": "#0E1C42",
+  "paper": "#F6F7FA",
+  "ink": "#0E1C42",
+  "muted": "#5d6883",
+  "font": "'Segoe UI', Arial, sans-serif"
+ },
+ "lessons": [
+  {
+   "page": "unit-10-lesson.html",
+   "heading": "Module 10",
+   "title": "Monochromatic Color and Value",
+   "folder": "Module 10 - Monochromatic Color and Value",
+   "activities": [
+    {
+     "name": "More works to study",
+     "cards": [
+      {
+       "type": "picture",
+       "img": "art-yves-klein-anthropometry-princess-helena.jpg",
+       "label": "Anthropometry: Princess Helena",
+       "artist": "Yves Klein",
+       "caption": "1960. Oil on paper on wood.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-ansel-adams-the-tetons-and-the-snake-river-grand-teton-natio.jpg",
+       "label": "The Tetons and the Snake River, Grand Teton National Park, Wyoming",
+       "artist": "Ansel Adams",
+       "caption": "1942. Gelatin silver print.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-franz-anton-maulbertsch-the-glorification-of-the-royal-hunga.jpg",
+       "label": "The Glorification of the Royal Hungarian Saints",
+       "artist": "Franz Anton Maulbertsch",
+       "caption": "ca. 1772-73. Oil on canvas.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-ansel-adams-mount-williamson-the-sierra-nevada-from-manzanar.jpg",
+       "label": "Mount Williamson, the Sierra Nevada, from Manzanar, California",
+       "artist": "Ansel Adams",
+       "caption": "1945. Gelatin silver print.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-kazimir-malevich-universal-landscape-illustration-from-explo.jpg",
+       "label": "Universal Landscape (Illustration from \"Explodity\")",
+       "artist": "Kazimir Malevich",
+       "caption": "1913. Lithograph.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-lascaux-hall-of-bulls-left-wall-bulls-horses-and-deer.jpg",
+       "label": "Lascaux: Hall of Bulls (left wall), Bulls, Horses and Deer",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-dora-maar-guernica-state-ii.jpg",
+       "label": "Guernica, State II",
+       "artist": "Dora Maar",
+       "caption": "1937.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-yves-klein-untitled-ant-154.jpg",
+       "label": "Untitled (ANT 154)",
+       "artist": "Yves Klein",
+       "caption": "1961. Pigment and synthetic resin on paper laid down on canvas.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      },
+      {
+       "type": "picture",
+       "img": "art-painter-of-the-berlin-dancing-girl-red-figure-calyx-krater.jpg",
+       "label": "Red-Figure Calyx-Krater",
+       "artist": "Painter of the Berlin Dancing Girl",
+       "caption": [
+        "440-420 B.C.E.",
+        "Terracotta."
+       ],
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      }
+     ]
+    },
+    {
+     "name": "How value builds form",
+     "cards": [
+      {
+       "type": "picture",
+       "img": "art-jacques-villon-mother-and-child.jpg",
+       "label": "Mother and Child",
+       "artist": "Jacques Villon (French, 1875 to 1963), after Pablo Picasso",
+       "caption": "1930. Color lithograph.",
+       "credit": "Image: Artstor Digital Library (JSTOR), used under Optima's Artstor license."
+      }
+     ]
+    },
+    {
+     "name": "Module 10.02 VR/Critique: Monochromatic Gallery Critique",
+     "folder": "Module 10.02 VR-Critique",
+     "source": "take-into-vr/sources/module-10-02-vr-critique.html",
+     "cards": [
+      {
+       "type": "picture",
+       "img": "art-whistler-mother.jpg",
+       "label": "Arrangement in Grey and Black No. 1 (\"Whistler's Mother\")",
+       "artist": "James McNeill Whistler",
+       "caption": "1871. Musee d'Orsay, Paris.",
+       "credit": "Public domain."
+      },
+      {
+       "type": "picture",
+       "img": "art-whistler-falling-rocket.jpg",
+       "label": "Nocturne in Black and Gold: The Falling Rocket",
+       "artist": "James McNeill Whistler",
+       "caption": "about 1875. Detroit Institute of Arts.",
+       "credit": "Public domain."
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}
